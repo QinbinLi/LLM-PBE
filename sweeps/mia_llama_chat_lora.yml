@@ -1,0 +1,30 @@
+name: MIA llama lora
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+- "--num_sample=1000"
+- "--arch=meta-llama/Llama-2-7b-chat-hf"
+- "--peft=lora"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      # - PPL
+      # - LOSS
+      # - LOWER_CASE
+      # - WINDOW
+      # - LIRA
+      - NEIGHBOR
+      - REFER
+  model:
+    values:
+      - LLM-PBE/echr-llama2-7b-chat-undefended
+      - LLM-PBE/echr-llama2-7b-chat-scrubbed
+      - LLM-PBE/echr-llama2-7b-chat-dp8
+program: attacks.MIA.run

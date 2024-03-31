@@ -1,0 +1,17 @@
+name: evaluate
+project: pii-leakage
+command:
+- ${interpreter}
+- ${program}
+- ${args}
+method: grid
+metric:
+  goal: minimize
+  name: extract prec
+parameters:
+  config_path:
+    values:
+    - configs/evaluate/pii-extraction_undefended.yml
+    - configs/evaluate/pii-extraction_scrubbed.yml
+    - configs/evaluate/pii-extraction_dp8.yml
+program: evaluate.py

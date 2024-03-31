@@ -1,0 +1,29 @@
+name: MIA
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+# example: python -m attacks.MIA.demo --metric=perplexity
+- "--num_sample=-1"
+# - "--model=LLM-PBE/echr-gpt2-small-undefended"
+- "--arch=gpt2"
+- "--peft=none"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      - PPL
+      # - LOWER_CASE
+      # - WINDOW
+      # - LIRA
+  model:
+    values:
+      - LLM-PBE/echr-gpt2-small-undefended
+      # - LLM-PBE/echr-gpt2-small-scrubbed
+      # - LLM-PBE/echr-gpt2-small-dp8
+program: attacks.MIA.run

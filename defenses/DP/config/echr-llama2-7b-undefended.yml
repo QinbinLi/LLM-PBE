@@ -1,0 +1,38 @@
+# Fine-tune an LM on the enron text dataset.
+
+dataset_args:
+  # dataset_path: ../src/pii_leakage/extern/echr
+  dataset_path: data/echr
+  dataset_mode: undefended
+  sample_duplication_rate: 1
+
+trainer_args:
+  output_dir: ./results/echr-llama2-7b-undefended/
+  evaluation_strategy: steps
+  eval_steps: 200
+  logging_steps: 10
+  save_total_limit: 2
+  save_strategy: steps
+  save_steps: 100
+  overwrite_output_dir: True
+  # save_steps: 750  # forgot to remove
+  callback_after_n_steps: 100
+  num_train_epochs: 4
+  # batch size=32
+  gradient_accumulation_steps: 8
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  learning_rate: 0.00001
+  resume_from_checkpoint: True
+
+model_args:
+  architecture: meta-llama/Llama-2-7b-hf
+  pre_trained: True   # Start from a pre-trained checkpoint
+  # peft
+  peft: lora
+
+ner_args:
+  ner: flair
+  ner_model: flair/ner-english-ontonotes-large
+  anon_token: <MASK>
+  anonymize: False

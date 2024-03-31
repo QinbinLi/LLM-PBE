@@ -1,0 +1,40 @@
+name: MIA
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+# example: python -m attacks.MIA.demo --metric=perplexity
+# - "--metric=PPL" 
+# - "--num_sample=30" 
+- "--arch=meta-llama/Llama-2-7b-hf"
+# - "--model=checkpoints/llama2-echr"
+- "--peft=none"
+# - "--num_sample=10000"
+- "--num_sample=1000"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      - PPL
+      # # - LOSS
+      - LOWER_CASE
+      # # - WINDOW
+      - LIRA
+      # - NEIGHBOR
+      - REFER
+  model:
+    values:
+      # vary different epochs
+      # - LLM-PBE/together-llama-2-7B-echr-undefended
+      - LLM-PBE/together-llama-2-7B-echr-undefended:4epoch
+  data:
+    values:
+      - LLM-PBE/echr-date  # TODO how to load?
+      - LLM-PBE/echr-name  # TODO how to load?
+      - LLM-PBE/echr-loc  # TODO how to load?
+program: attacks.MIA.run

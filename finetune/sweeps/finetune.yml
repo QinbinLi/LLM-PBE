@@ -1,0 +1,20 @@
+name: finetune
+project: llm-pbe
+command:
+- ${interpreter}
+- ${program}
+- ${args}
+method: grid
+metric:
+  goal: minimize
+  name: extract prec
+parameters:
+  config_path:
+    values:
+    # - configs/fine-tune/echr_10k-llama2-7b-undefended.yml
+    # - configs/fine-tune/echr_10k-llama2-7b-scrubbed.yml
+    # - configs/fine-tune/echr_10k-llama2-7b-dp8.yml
+    - configs/fine-tune/enron_1k-llama2-7b-undefended.yml
+    - configs/fine-tune/enron_1k-llama2-7b-scrubbed.yml
+    - configs/fine-tune/enron_1k-llama2-7b-dp8.yml
+program: fine_tune.py

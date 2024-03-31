@@ -1,0 +1,38 @@
+name: MIA
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+# example: python -m attacks.MIA.demo --metric=perplexity
+# - "--metric=PPL" 
+# - "--num_sample=30" 
+# iter-138 is about the best val for scrub
+# - "--model=LLM-PBE/together-llama-2-7B-echr-scrubbed:checkpoint_138" 
+- "--arch=meta-llama/Llama-2-7b-hf"
+- "--peft=none"
+# - "--num_sample=10000"
+- "--num_sample=1000"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      - PPL
+      # - LOSS
+      - LOWER_CASE
+      # - WINDOW
+      - LIRA
+      - NEIGHBOR
+      - REFER
+      # - ZLIB
+  model:
+    values:
+      # - LLM-PBE/together-llama-2-7B-echr-undefended  # final model
+      # - LLM-PBE/together-llama-2-7B-echr-scrubbed:checkpoint_138
+      - LLM-PBE/together-llama-2-7B-echr-scrubbed:checkpoint_184  # about 4 epochs
+      # - LLM-PBE/together-llama-2-7B-echr-scrubbed:final_model
+program: attacks.MIA.run

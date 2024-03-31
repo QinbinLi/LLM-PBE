@@ -1,0 +1,19 @@
+name: MIA
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+# example: python -m attacks.MIA.demo --metric=perplexity
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      - PPL
+      - LOWER_CASE
+      # - WINDOW
+program: attacks.MIA.demo

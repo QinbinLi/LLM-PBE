@@ -1,0 +1,49 @@
+name: DEA Pythia data scaling
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+- "--arch=none"
+- "--peft=none"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: max_score
+parameters:
+  model:
+    values:
+      # 1.4b
+      - EleutherAI/pythia-1.4b:step1000
+      - EleutherAI/pythia-1.4b:step10000
+      - EleutherAI/pythia-1.4b:step20000
+      - EleutherAI/pythia-1.4b:step40000
+      - EleutherAI/pythia-1.4b:step60000
+      - EleutherAI/pythia-1.4b:step80000
+      - EleutherAI/pythia-1.4b:step100000
+      # 2.8b
+      - EleutherAI/pythia-2.8b:step1000
+      - EleutherAI/pythia-2.8b:step10000
+      - EleutherAI/pythia-2.8b:step20000
+      - EleutherAI/pythia-2.8b:step40000
+      - EleutherAI/pythia-2.8b:step60000
+      - EleutherAI/pythia-2.8b:step80000
+      - EleutherAI/pythia-2.8b:step100000
+      # 6.9b
+      - EleutherAI/pythia-6.9b:step1000
+      - EleutherAI/pythia-6.9b:step10000
+      - EleutherAI/pythia-6.9b:step20000
+      - EleutherAI/pythia-6.9b:step40000
+      - EleutherAI/pythia-6.9b:step60000
+      - EleutherAI/pythia-6.9b:step80000
+      - EleutherAI/pythia-6.9b:step100000
+      # 12b
+      - EleutherAI/pythia-12b:step1000
+      - EleutherAI/pythia-12b:step10000
+      - EleutherAI/pythia-12b:step20000
+      - EleutherAI/pythia-12b:step40000
+      - EleutherAI/pythia-12b:step60000
+      - EleutherAI/pythia-12b:step80000
+      - EleutherAI/pythia-12b:step100000
+program: attacks.DataExtraction.extract_enron_local

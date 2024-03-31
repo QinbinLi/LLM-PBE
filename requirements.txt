@@ -1,0 +1,6 @@
+together==0.2.5
+transformers==4.34.1
+openai==1.3.5
+tiktoken==0.6.0
+jsonlines==4.0.0
+anthropic==0.15.1

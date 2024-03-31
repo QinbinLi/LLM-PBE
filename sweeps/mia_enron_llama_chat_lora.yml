@@ -1,0 +1,37 @@
+name: MIA
+project: LLM-PBE
+command:
+- ${interpreter}
+- "-m"
+- ${program}
+# example: python -m attacks.MIA.demo --metric=perplexity
+# - "--metric=PPL" 
+# - "--num_sample=30" 
+- "--arch=meta-llama/Llama-2-7b-chat-hf"
+# - "--model=checkpoints/llama2-echr"
+- "--peft=lora"
+# - "--num_sample=10000"
+- "--num_sample=1000"
+- "--data=enron"
+# for neighbor only
+- "--n_neighbor=10"  # to speed up neighbor attack
+- "--max_seq_len=128"  # TODO this is too small
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: auc
+parameters:
+  metric:
+    values:
+      # - PPL
+      # # - LOSS
+      # - LOWER_CASE
+      # # - WINDOW
+      # - LIRA
+      - NEIGHBOR
+      # - REFER
+  model:
+    values:
+      - LLM-PBE/enron-llama2-7b-chat-dp8
+program: attacks.MIA.run
