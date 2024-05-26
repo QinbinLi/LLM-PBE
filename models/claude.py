@@ -2,6 +2,7 @@ from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 import time
 import os
 from copy import deepcopy
+import urllib.request
 
 from models.LLMBase import LLMBase
 
@@ -26,7 +27,8 @@ class ClaudeLLM(LLMBase):
         
         # wget https://public-json-tokenization-0d8763e8-0d7e-441b-a1e2-1c73b8e79dc3.storage.googleapis.com/claude-v1-tokenization.json
         from transformers import PreTrainedTokenizerFast
-        self.tokenizer = PreTrainedTokenizerFast(tokenizer_file="claude-v1-tokenization.json")    
+        urllib.request.urlretrieve("https://public-json-tokenization-0d8763e8-0d7e-441b-a1e2-1c73b8e79dc3.storage.googleapis.com/claude-v1-tokenization.json", "files/claude-v1-tokenization.json")
+        self.tokenizer = PreTrainedTokenizerFast(tokenizer_file="files/claude-v1-tokenization.json")    
     
     def load_model(self):
         pass

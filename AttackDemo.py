@@ -1,12 +1,12 @@
-from attacks.DataExtraction.enron import EnronDataExtraction
-from models.togetherai import TogetherAIModels
-from attacks.Jailbreak.jailbreak import Jailbreak
+from data import JailbreakQueries
+from models import TogetherAIModels
+from attacks import Jailbreak
+from metrics import JailbreakRate
 
-enron = EnronDataExtraction(data_path="data/enron")
-prompts, _ = enron.generate_prompts(format="prefix-50")
-# Replace api_key with your own API key
+data = JailbreakQueries()
+# Fill api_key
 llm = TogetherAIModels(model="togethercomputer/llama-2-7b-chat", api_key="")
 attack = Jailbreak()
-results = attack.execute_attack(prompts, llm)
-print("results:", results)
-
+results = attack.execute_attack(data, llm)
+rate = JailbreakRate(results).compute_metric()
+print("rate:", rate)

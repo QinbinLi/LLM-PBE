@@ -1,0 +1,52 @@
+name: Prompt Leakage
+project: LLM-PBE
+command:
+- ${interpreter}
+- ${program}
+- "--num_test=300"
+# - "--num_test=1"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: max_score
+parameters:
+  model:
+    values:
+      # # don't run in parallel.
+      # - gpt-3.5-turbo
+      # - gpt-4
+      # # don't run in parallel.
+      # - meta-llama/Llama-2-7b-chat-hf
+      # - meta-llama/Llama-2-13b-chat-hf
+      # - meta-llama/Llama-2-70b-chat-hf
+      # # not support sys prompts
+      # - mistralai/Mistral-7B-Instruct-v0.1
+      # - mistralai/Mixtral-8x7B-Instruct-v0.1
+      # - lmsys/vicuna-7b-v1.5
+      # - lmsys/vicuna-13b-v1.5
+      # - togethercomputer/falcon-7b-instruct
+      # - togethercomputer/falcon-40b-instruct
+      # - mistralai/Mistral-7B-Instruct-v0.2
+      - claude-2.1
+  data:
+    values:
+      - blackfriday
+      # - GPTs
+      # - blackfriday/Academic
+      # - blackfriday/Business
+      # - blackfriday/Creative
+      # - blackfriday/Game
+      # - blackfriday/Job-Hunting
+      # - blackfriday/Marketing
+      # - blackfriday/Productivity-&-life-style
+      # - blackfriday/Programming
+  # defense:
+  #   values:
+  #     - no-repeat
+  #     # - top-secret
+  #     # - ignore-ignore-inst
+  #     # - no-ignore
+  #     # - explain
+  #     # - eaten
+program: extract_prompt.py

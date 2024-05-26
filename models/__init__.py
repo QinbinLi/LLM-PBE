@@ -1,4 +1,6 @@
 from .chatgpt import ChatGPT
+from .togetherai import TogetherAIModels
+from .claude import ClaudeLLM
 
 def LoadModel(model_type, model_path=None, api_key=None, custom_model=None):
     """

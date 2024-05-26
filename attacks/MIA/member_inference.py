@@ -22,6 +22,7 @@ class MIAMetric(Enum):
 
     LIRA = "lira"  # https://arxiv.org/pdf/2203.03929.pdf
     NEIGHBOR = "neighbor"   # https://aclanthology.org/2023.findings-acl.719.pdf
+    MIN_K_PROB = "min_k_prob"   # https://arxiv.org/pdf/2310.16789.pdf
 
 class MemberInferenceAttack(AttackBase):
     """Membership Inference Attack (MIA).
@@ -87,6 +88,25 @@ class MemberInferenceAttack(AttackBase):
             ppl = model.evaluate_ppl(text)
             num_bits = len(zlib.compress(text.encode())) * 8
             score = ppl / num_bits
+        elif self.metric == MIAMetric.MIN_K_PROB:
+            # Get logits from model
+            input_ids = model.tokenizer.encode(text, return_tensors='pt', truncation=True, max_length=model.max_seq_len).cuda()
+            with torch.no_grad():
+                outputs = model._lm(input_ids, labels=input_ids)
+            logits = outputs[1]
+
+            # Apply softmax to the logits to get probabilities
+            probabilities = torch.nn.functional.log_softmax(logits, dim=-1).cpu().data
+            all_prob = []
+            input_ids_processed = input_ids[0][1:]
+            for i, token_id in enumerate(input_ids_processed):
+                probability = probabilities[0, i, token_id].item()
+                all_prob.append(probability)
+
+            # Calculate Min-K% Probability
+            k_length = int(len(all_prob) * 0.10)  # TODO: For now, K is hard-coded as 10%
+            topk_prob = np.sort(all_prob)[:k_length]
+            score = -np.mean(topk_prob).item()
         else:
             raise NotImplementedError(f"{self.metric}")
         return score

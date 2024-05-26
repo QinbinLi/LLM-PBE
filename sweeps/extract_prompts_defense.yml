@@ -1,0 +1,44 @@
+name: Prompt Leakage
+project: LLM-PBE
+command:
+- ${interpreter}
+- ${program}
+- "--num_test=300"
+# - "--num_test=1"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: max_score
+parameters:
+  model:
+    values:
+      # # don't run in parallel.
+      # - gpt-3.5-turbo
+      - gpt-4
+      # # don't run in parallel.
+      # - meta-llama/Llama-2-7b-chat-hf
+      # - meta-llama/Llama-2-70b-chat-hf
+      # - mistralai/Mistral-7B-Instruct-v0.1
+      # - mistralai/Mixtral-8x7B-Instruct-v0.1
+  data:
+    values:
+      - blackfriday
+      # - GPTs
+      # - blackfriday/Academic
+      # - blackfriday/Business
+      # - blackfriday/Creative
+      # - blackfriday/Game
+      # - blackfriday/Job-Hunting
+      # - blackfriday/Marketing
+      # - blackfriday/Productivity-&-life-style
+      # - blackfriday/Programming
+  defense:
+    values:
+      # - no-repeat
+      # - top-secret
+      # - ignore-ignore-inst
+      # - no-ignore
+      # - explain
+      - eaten
+program: extract_prompt.py

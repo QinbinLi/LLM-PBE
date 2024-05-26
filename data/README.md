@@ -1,10 +1,3 @@
-# Datasets
-
-- Dataset 1: [link]
-- Dataset 2: [link]
-...
-
-
 ## Prompt Leakage
 
 1. Download GPTStores system prompts

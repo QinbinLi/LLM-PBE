@@ -59,7 +59,7 @@ for i, prompt in enumerate(tqdm(prompts)):
         print(e)
         continue
     
-    if i%500==0:
+    if i%100==0:
         print(f'Finish {i} samples')
         with open(output_fname, 'w') as outfile:
             for entry in result:

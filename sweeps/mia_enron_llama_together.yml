@@ -10,12 +10,12 @@ command:
 - "--arch=meta-llama/Llama-2-7b-hf"
 # - "--model=checkpoints/llama2-echr"
 - "--peft=none"
-- "--num_sample=10000"
-# - "--num_sample=1000"
+# - "--num_sample=10000"
+- "--num_sample=1000"
 - "--data=enron"
 # for neighbor only
-- "--n_neighbor=10"  # to speed up neighbor attack
-- "--max_seq_len=128"  # TODO this is too small
+# - "--n_neighbor=10"  # to speed up neighbor attack
+# - "--max_seq_len=128"  # TODO this is too small
 - ${args}
 method: grid
 metric:
@@ -24,13 +24,14 @@ metric:
 parameters:
   metric:
     values:
-      - PPL
+      # - PPL
       # # - LOSS
-      - LOWER_CASE
+      # - LOWER_CASE
       # # - WINDOW
-      - LIRA
+      # - LIRA
       # - NEIGHBOR
-      - REFER
+      # - REFER
+      - MIN_K_PROB
   model:
     values:
       # vary different epochs

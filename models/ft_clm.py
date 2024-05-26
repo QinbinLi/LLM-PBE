@@ -64,8 +64,7 @@ class FinetunedCasualLM(LLMBase):
             model_path = self.model_path
         model_cls, tokenizer = AutoModelForCausalLM, AutoTokenizer
         self._tokenizer = tokenizer.from_pretrained(self.arch,
-                                                    use_fast=self.tokenizer_use_fast,
-                                                    max_len=self.max_seq_len)
+                                                    use_fast=self.tokenizer_use_fast)
         if self.verbose:
             print(
                 f"> Loading the provided {self.arch} checkpoint from '{model_path}'.")
@@ -81,7 +80,7 @@ class FinetunedCasualLM(LLMBase):
         self._tokenizer.pad_token = self._tokenizer.eos_token
         self._lm.config.pad_token_id = self._lm.config.eos_token_id
         
-    def query(self, text, sampling_args=SamplingArgs()):
+    def query(self, text):
         """
         Query an open-source model with a given text prompt.
         
@@ -98,68 +97,20 @@ class FinetunedCasualLM(LLMBase):
         # output = self.model.generate(input_ids)
         
         # Implement the code to query the open-source model
-        generated_tokens = self._lm.generate(
+        output = self._lm.generate(
             input_ids=input_ids.to('cuda'),
             # attention_mask=attention_mask.to(self.env_args.device),
+            max_new_tokens=self.max_seq_len,
             # max_length=min(self.n_positions, input_len + sampling_args.seq_len),
-            max_length=sampling_args.prefix_length + sampling_args.suffix_length,
-            do_sample=sampling_args.do_sample,
-            top_k=sampling_args.top_k,
-            top_p=sampling_args.top_p,
-            typical_p = sampling_args.typical_p,
-            temperature = sampling_args.temperature,
-            repetition_penalty = sampling_args.repetition_penalty,
+            # do_sample=sampling_args.do_sample,
+            # top_k=sampling_args.top_k,
+            # top_p=sampling_args.top_p,
             # output_scores=True,
-            return_dict_in_generate=False
-        ).cpu().detach()
-
-        # TODO: Implement High Confidence (add high confidence threshold?)
-        generations = []
-        generation_len = sampling_args.prefix_length + sampling_args.suffix_length
-        if sampling_args.high_conf:
-            # Compute sequence probabilities
-            outputs = self._lm(generated_tokens.cuda(), labels=generated_tokens.cuda())
-            logits = outputs.logits.cpu().detach()
-            logits = logits[:, :-1].reshape((-1, logits.shape[-1])).float()
-
-            # Analyze top 2 logits for each token
-            topk = 2
-            top_scores, _ = logits.topk(topk, dim=-1)
-            high_confidence_flag = ((top_scores[:, 0] - top_scores[:, 1]) > 0.5) & (top_scores[:, 0] > 0)
-
-            # Compute loss
-            cross_entropy_loss = torch.nn.functional.cross_entropy(logits, generated_tokens[:, 1:].flatten(), reduction='none')
-            cross_entropy_loss_np = cross_entropy_loss.numpy()
-            loss_mean = np.mean(cross_entropy_loss_np, axis=0)
-            loss_std = np.std(cross_entropy_loss_np, axis=0)
-            loss_floor = loss_mean - 3*loss_std
-            loss_upper = loss_mean + 3*loss_std
-
-            loss_per_token = cross_entropy_loss.clone()
-            loss_per_token = torch.where((cross_entropy_loss < loss_floor) | (cross_entropy_loss > loss_upper), torch.tensor(1.0), cross_entropy_loss)
-            loss_per_token -= high_confidence_flag.float() * loss_mean * 0.15
-            loss_per_token = loss_per_token.reshape((-1, generation_len - 1))[:, -sampling_args.suffix_length:]
-
-            print("Loss per token", loss_per_token)
-            sequence_likelihood = loss_per_token.mean(1)
-            print("Loss per token", loss_per_token.shape)
-            print("likelihood", sequence_likelihood)
-            # # print("LINKIEIFJSDF", sequence_likelihood)
-            # sorted_indices = torch.argsort(adjusted_loss)
-            # sorted_generated_tokens = generated_tokens[0][sorted_indices]
-
-            # inverse_indices = torch.argsort(sorted_indices)
-            # # Count the number of tokens that are in the same position
-            # print(generated_tokens == sorted_generated_tokens[inverse_indices])
-
-        # TODO: Implement Zlib
-
-        # TODO: Implement Context Window
-        # generated_tokens = sorted_generated_tokens
+            return_dict_in_generate=True
+        )
 
         # Decode the generated text back to a readable string
-        # print(generated_tokens.shape)
-        generated_text = self._tokenizer.decode(generated_tokens[0], skip_special_tokens=True)
+        generated_text = self._tokenizer.decode(output.sequences[0], skip_special_tokens=True)
         return generated_text
         
     def evaluate(self, text, tokenized=False):

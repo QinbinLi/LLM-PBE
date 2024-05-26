@@ -37,13 +37,21 @@ class TogetherAIModels(LLMBase):
             chat_template = chat_template.replace('    ', '').replace('\n', '')
             self.tokenizer.chat_template = chat_template
         else:
-            self.tokenizer = AutoTokenizer.from_pretrained(self.model)
+            try:
+                self.tokenizer = AutoTokenizer.from_pretrained(self.model)
+            except:
+                self.tokenizer = None
+                print("WARNING: Tokenizer is not founded")
     
     def load_model(self):
         pass
         
     def query_remote_model(self, prompt):
-        num_tokens = count_tokens(self.tokenizer, prompt)
+        if self.tokenizer:
+            num_tokens = count_tokens(self.tokenizer, prompt)
+        else:
+            # assume that the default num_tokens is 100 for input prompt
+            num_tokens = 100
         payload = deepcopy(self.payload)
         payload["prompt"] = prompt
         n_attempt = 0
