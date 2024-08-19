@@ -80,7 +80,7 @@ class FinetunedCasualLM(LLMBase):
         self._tokenizer.pad_token = self._tokenizer.eos_token
         self._lm.config.pad_token_id = self._lm.config.eos_token_id
         
-    def query(self, text):
+    def query(self, text, new_str_only=False):
         """
         Query an open-source model with a given text prompt.
         
@@ -106,11 +106,15 @@ class FinetunedCasualLM(LLMBase):
             # top_k=sampling_args.top_k,
             # top_p=sampling_args.top_p,
             # output_scores=True,
-            return_dict_in_generate=True
+            return_dict_in_generate=True,
+            
         )
 
         # Decode the generated text back to a readable string
-        generated_text = self._tokenizer.decode(output.sequences[0], skip_special_tokens=True)
+        if new_str_only:
+            generated_text = self._tokenizer.decode(output.sequences[0][len(input_ids[0]):], skip_special_tokens=True)
+        else:
+            generated_text = self._tokenizer.decode(output.sequences[0], skip_special_tokens=True)
         return generated_text
         
     def evaluate(self, text, tokenized=False):
