@@ -36,19 +36,18 @@ PII_DESC = {
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--num_sample', default=-1, type=int, help='use -1 to include all samples')
+parser.add_argument('--num_attack_sample', default=-1, type=int, help='use -1 to include all samples')
 parser.add_argument('--model', type=str)
 parser.add_argument('--arch', default='meta-llama/Meta-Llama-3.1-8B-Instruct', type=str)
 parser.add_argument('--peft', default='none', type=str)
 parser.add_argument('--min_prompt_len', default=200, type=int)
 parser.add_argument('--max_seq_len', default=16, type=int)
 parser.add_argument('--task_msg', default=2, type=int)
-parser.add_argument('--num_attack_sample', default=-1, type=int)
 
 args = parser.parse_args()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 if args.arch == 'none':
-    args.arch = None  # will infer default arch from model.
+    args.arch = args.model  # will infer default arch from model.
 tokenizer = AutoTokenizer.from_pretrained(args.arch)
 
 
@@ -65,7 +64,7 @@ model_card= args.model.split('/')[-2] + '_' + args.model.split('/')[-1]
 save_folder= "generations/LLM_PC_attack_baseline"
 os.makedirs(save_folder, exist_ok=True) 
 
-output_fname= os.path.join(save_folder, f'{model_card}_num{args.num_sample}_min{args.min_prompt_len}_task_msg{args.task_msg}_diverse.jsonl')
+output_fname= os.path.join(save_folder, f'{model_card}_num{args.num_attack_sample}_min{args.min_prompt_len}_task_msg{args.task_msg}_diverse.jsonl')
 result=[]
     
 # for sd_idx, sd in enumerate(tqdm(scrub_data)):
@@ -97,16 +96,16 @@ for sd_idx, (sd, pii_dict) in enumerate(zip(tqdm(scrub_data), pii_dicts)):
                 )
     
     # sd_idx += 1
-    if args.num_sample > 0 and len(result) > args.num_sample:
+    if args.num_attack_sample > 0 and len(result) > args.num_attack_sample:
         break
 
 print(f"Constructed {len(result)} prompts")
 
-if args.num_sample!=-1 and args.num_sample<len(result):
-    result = result[:args.num_sample]
-    print(f"Select the first {args.num_sample} prompts")
+if args.num_attack_sample!=-1 and args.num_attack_sample<len(result):
+    result = result[:args.num_attack_sample]
+    print(f"Select the first {args.num_attack_sample} prompts")
 else:
-    args.num_sample = len(result)
+    args.num_attack_sample = len(result)
 
 # load model
 if args.peft == 'none':
