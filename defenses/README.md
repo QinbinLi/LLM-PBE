@@ -26,7 +26,6 @@ The `DefenseBase` class serves as the base class for all defense mechanisms in t
 - `DefenseBase.py`: Contains the base class for defenses.
 - `DP/`: Contains implementations for defenses using Differential Privacy.
 - `Unlearning/`: Contains methods for machine unlearning.
-- `Prompts/`: Contains defenses that involve prompt modifications.
 
 ## How to Extend
 

@@ -28,7 +28,7 @@ The `AttackBase` class is designed to be a base class for all specific attack ty
 - `AttackBase.py`: Contains the base class for attacks.
 - `DataExtraction/`: Contains implementations of data extraction attacks.
 - `MIA/`: Contains implementations of membership inference attacks.
-- `Prompts/`: Contains implementations of prompt-based attacks.
+- `PromptLeakage/`: Contains implementations of prompt-based attacks.
 - `Jailbreak/`: Contains implementations of jailbreak attacks.
 
 ## How to Extend
