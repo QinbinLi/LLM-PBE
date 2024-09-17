@@ -60,4 +60,4 @@ print(f"Attack metrics on DP model: {dp_evaluation}")
 
 ### Finetuning LLMs
 
-Finetuning code is hosted separately with a different environment setup. Please refer to (Private Finetuning for LLMs (LLM-PFT))[https://github.com/jyhong836/llm-dp-finetune].
+Finetuning code is hosted separately with a different environment setup. Please refer to [Private Finetuning for LLMs (LLM-PFT)](https://github.com/jyhong836/llm-dp-finetune).
