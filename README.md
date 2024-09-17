@@ -4,6 +4,9 @@
     <a href="https://llm-pbe.github.io/document">
             <img alt="Build" src="https://img.shields.io/badge/1.0-document-orange">
     </a>
+    <a href="https://arxiv.org/abs/2408.12787">
+            <img alt="Build" src="https://img.shields.io/badge/arXiv-2408.12787-green">
+    </a>
     <a href="https://www.python.org/downloads/">
             <img alt="Build" src="https://img.shields.io/badge/3.10-Python-blue">
     </a>
@@ -12,14 +15,12 @@
     </a>
 </p>
 
-**LLM-PBE** is a toolkit to assess the data privacy of LLMs. The components of LLM-PBE are shown below.
-![Alt text](docs/images/components.png)
+**LLM-PBE** is a toolkit to assess the data privacy of LLMs. The code is used for the [LLM-PBE](https://llm-pbe.github.io/home) [![arXiv](https://img.shields.io/badge/arXiv-2408.12787-green)](https://arxiv.org/abs/2408.12787) benchmark, which was selected as the :trophy: [Best Research Paper Nomination in VLDB 2024](https://llm-pbe.github.io/vldb2024_nomination_Qinbin.pdf).
 
-# Getting Started
-You can refer to our primary documentation [here](https://llm-pbe.readthedocs.io/en/latest/index.html).
+## Getting Started
  
 
-## Env
+### Setup Environment
 
 ```shell
 conda create -n llm-pbe python=3.10 -y
@@ -33,7 +34,7 @@ pip install -r requirements.txt
 
 
 
-## Attack Demo
+### Attack Demo
 You can find the attack demo below, which is also presented in `AttackDemo.py`
 ```python
 from data import JailbreakQueries
@@ -49,7 +50,7 @@ rate = JailbreakRate(results).compute_metric()
 print("rate:", rate)
 ```
 
-## Evaluate DP model metrics
+### Evaluate DP model metrics
 ```python
 dp_evaluation = metrics.Evaluate(attack_dp_metrics, ground_truths=dataset.labels)
 # Output results
@@ -57,6 +58,6 @@ print(f"Attack metrics on regular model: {evaluation}")
 print(f"Attack metrics on DP model: {dp_evaluation}")
 ```
 
-## Finetuning LLMs
+### Finetuning LLMs
 
 Finetuning code is hosted separately with a different environment setup. Please refer to (Private Finetuning for LLMs (LLM-PFT))[https://github.com/jyhong836/llm-dp-finetune].
