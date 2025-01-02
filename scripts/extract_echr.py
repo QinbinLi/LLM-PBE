@@ -23,7 +23,7 @@ args = parser.parse_args()
 model_path=args.model
 
 
-llm = TogetherAIModels(model=args.model, api_key="1d951da071cf06b3ce58ead7ae10f2cca564e10478223a47c7a64e4ed9039a8f", max_tokens=512)
+llm = TogetherAIModels(model=args.model, api_key="xxx", max_tokens=512)
 
 
 dataset= load_dataset(f"LLM-PBE/{args.data_name}")
